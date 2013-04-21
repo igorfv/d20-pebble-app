@@ -107,7 +107,6 @@ void runDices() {
   char *totalText = "000000";
   static char totalBuff[] = "000000";
 
-
   partial = random(dices[selectedDice]);
 
   total = partial;
@@ -189,7 +188,8 @@ void menu_long_select_click(ClickRecognizerRef recognizer, Window *window) {
   (void)window;
 
   if(setupPhase == 2)
-  {
+  { 
+    vibes_short_pulse();
     runDices();
   }
 }
