@@ -138,7 +138,10 @@ void menu_long_select_click(ClickRecognizerRef recognizer, Window *window) {
   (void)recognizer;
   (void)window;
 
-  runDices();
+  if(setupPhase == 2)
+  {
+    runDices();
+  }
 }
 
 
