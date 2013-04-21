@@ -63,6 +63,12 @@ void showRollsText() {
 }
 
 
+//Show # rolls text
+void runDices() {
+  text_layer_set_text(&selectionText, "running");
+}
+
+
 // Modify these common button handlers
 void menu_up_click(ClickRecognizerRef recognizer, Window *window) {
   (void)recognizer;
@@ -119,10 +125,11 @@ void menu_select_click(ClickRecognizerRef recognizer, Window *window) {
   {
     setupPhase++;
     text_layer_set_text(&titleText, "Result:");
+    runDices();
   }
   else if(setupPhase == 2)
   {
-
+    newSetup();
   }
 }
 
@@ -131,7 +138,7 @@ void menu_long_select_click(ClickRecognizerRef recognizer, Window *window) {
   (void)recognizer;
   (void)window;
 
-  newSetup();
+  runDices();
 }
 
 
