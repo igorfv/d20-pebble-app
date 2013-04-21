@@ -257,6 +257,8 @@ void handle_init(AppContextRef ctx) {
   text_layer_set_text(&selectionText, "d4");
   layer_add_child(&window.layer, &selectionText.layer);
 
+  randSeed = get_unix_time();
+
   newSetup();
 }
 
