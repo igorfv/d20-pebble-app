@@ -3,6 +3,7 @@
 #include "pebble_app.h"
 #include "pebble_fonts.h"
 
+#include "itoa.h"
 
 #define MY_UUID { 0x69, 0xA7, 0x50, 0x95, 0x77, 0xDB, 0x4A, 0xB3, 0x92, 0x43, 0xED, 0xB0, 0x4C, 0xD2, 0x90, 0xE1 }
 PBL_APP_INFO(MY_UUID, "d20", "Igor Vieira", 1,0, /* App version */ RESOURCE_ID_IMAGE_MENU_ICON, APP_INFO_STANDARD_APP);
@@ -12,7 +13,6 @@ Window window;
 
 TextLayer titleText;
 TextLayer selectionText;
-TextLayer setupText;
 
 int dices[] = {4, 6, 8, 10, 12, 20, 100};
 int selectedDice = 0;
@@ -21,7 +21,6 @@ int setupPhase = 0;
 
 
 // Modify these common button handlers
-
 void menu_up_click(ClickRecognizerRef recognizer, Window *window) {
   (void)recognizer;
   (void)window;
@@ -62,6 +61,33 @@ void menu_click_config_provider(ClickConfig **config, Window *window) {
 }
 
 
+//Show dice text
+void showDiceText() {
+  char *newDice = "d100";
+  static char diceNum[] = "000";
+
+  itoa(dices[selectedDice], diceNum, 10);
+
+  strcpy(newDice, "d");
+  strcat(newDice, diceNum);
+
+  text_layer_set_text(&selectionText, newDice);
+}
+
+//New Setup
+void newSetup() {
+  setupPhase = 0;
+  selectedDice = 0;
+  multiDices = 1;
+
+  char *newDice;
+
+  text_layer_set_text(&titleText, "Select your dice:");
+
+  showDiceText();
+}
+
+
 // Standard app initialisation
 
 void handle_init(AppContextRef ctx) {
@@ -87,16 +113,10 @@ void handle_init(AppContextRef ctx) {
   text_layer_set_background_color(&selectionText, GColorClear);
   text_layer_set_font(&selectionText, fonts_get_system_font(FONT_KEY_GOTHAM_42_BOLD));
   text_layer_set_text_alignment(&selectionText, GTextAlignmentCenter);
-  text_layer_set_text(&selectionText, "d20");
+  text_layer_set_text(&selectionText, "d4");
   layer_add_child(&window.layer, &selectionText.layer);
 
-  text_layer_init(&setupText, GRect(0,168-30-16, 144, 30));
-  text_layer_set_text_color(&setupText, GColorWhite);
-  text_layer_set_background_color(&setupText, GColorClear);
-  text_layer_set_font(&setupText, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
-  text_layer_set_text_alignment(&setupText, GTextAlignmentCenter);
-  text_layer_set_text(&setupText, "Last: d100 > 10 times");
-  layer_add_child(&window.layer, &setupText.layer);
+  newSetup();
 }
 
 
