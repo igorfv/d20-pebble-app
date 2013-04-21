@@ -10,53 +10,49 @@ PBL_APP_INFO(MY_UUID, "d20", "Igor Vieira", 1,0, /* App version */ RESOURCE_ID_I
 
 Window window;
 
-TextLayer textLayer;
+TextLayer titleText;
+TextLayer selectionText;
+
 
 
 // Modify these common button handlers
 
-void up_single_click_handler(ClickRecognizerRef recognizer, Window *window) {
+void menu_up_click(ClickRecognizerRef recognizer, Window *window) {
   (void)recognizer;
   (void)window;
-
 }
 
 
-void down_single_click_handler(ClickRecognizerRef recognizer, Window *window) {
+void menu_down_click(ClickRecognizerRef recognizer, Window *window) {
   (void)recognizer;
   (void)window;
+}
 
+void menu_select_click(ClickRecognizerRef recognizer, Window *window) {
+  (void)recognizer;
+  (void)window;
 }
 
 
-void select_single_click_handler(ClickRecognizerRef recognizer, Window *window) {
+void menu_long_select_click(ClickRecognizerRef recognizer, Window *window) {
   (void)recognizer;
   (void)window;
-
-  text_layer_set_text(&textLayer, "Select!");
-}
-
-
-void select_long_click_handler(ClickRecognizerRef recognizer, Window *window) {
-  (void)recognizer;
-  (void)window;
-
 }
 
 
 // This usually won't need to be modified
 
-void click_config_provider(ClickConfig **config, Window *window) {
+void menu_click_config_provider(ClickConfig **config, Window *window) {
   (void)window;
 
-  config[BUTTON_ID_SELECT]->click.handler = (ClickHandler) select_single_click_handler;
+  config[BUTTON_ID_SELECT]->click.handler = (ClickHandler) menu_select_click;
 
-  config[BUTTON_ID_SELECT]->long_click.handler = (ClickHandler) select_long_click_handler;
+  config[BUTTON_ID_SELECT]->long_click.handler = (ClickHandler) menu_long_select_click;
 
-  config[BUTTON_ID_UP]->click.handler = (ClickHandler) up_single_click_handler;
+  config[BUTTON_ID_UP]->click.handler = (ClickHandler) menu_up_click;
   config[BUTTON_ID_UP]->click.repeat_interval_ms = 100;
 
-  config[BUTTON_ID_DOWN]->click.handler = (ClickHandler) down_single_click_handler;
+  config[BUTTON_ID_DOWN]->click.handler = (ClickHandler) menu_down_click;
   config[BUTTON_ID_DOWN]->click.repeat_interval_ms = 100;
 }
 
@@ -68,14 +64,18 @@ void handle_init(AppContextRef ctx) {
 
   window_init(&window, "d20");
   window_stack_push(&window, true /* Animated */);
-
-  text_layer_init(&textLayer, window.layer.frame);
-  text_layer_set_text(&textLayer, "Hello World");
-  text_layer_set_font(&textLayer, fonts_get_system_font(FONT_KEY_GOTHAM_30_BLACK));
-  layer_add_child(&window.layer, &textLayer.layer);
+  window_set_background_color(&window, GColorBlack);
 
   // Attach our desired button functionality
-  window_set_click_config_provider(&window, (ClickConfigProvider) click_config_provider);
+  window_set_click_config_provider(&window, (ClickConfigProvider) menu_click_config_provider);
+
+  text_layer_init(&titleText, GRect(0,0, 144, 30));
+  text_layer_set_text_color(&titleText, GColorBlack);
+  text_layer_set_background_color(&titleText, GColorWhite);
+  text_layer_set_font(&titleText, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
+  text_layer_set_text_alignment(&titleText, GTextAlignmentCenter);
+  text_layer_set_text(&titleText, "Select your dice:");
+  layer_add_child(&window.layer, &titleText.layer);
 }
 
 
