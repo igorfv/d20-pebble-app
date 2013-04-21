@@ -12,10 +12,12 @@ Window window;
 
 TextLayer titleText;
 TextLayer selectionText;
+TextLayer setupText;
 
 int dices[] = {4, 6, 8, 10, 12, 20, 100};
-int selectedDice = 1;
+int selectedDice = 0;
 int multiDices = 1;
+int setupPhase = 0;
 
 
 // Modify these common button handlers
@@ -87,6 +89,14 @@ void handle_init(AppContextRef ctx) {
   text_layer_set_text_alignment(&selectionText, GTextAlignmentCenter);
   text_layer_set_text(&selectionText, "d20");
   layer_add_child(&window.layer, &selectionText.layer);
+
+  text_layer_init(&setupText, GRect(0,168-30-16, 144, 30));
+  text_layer_set_text_color(&setupText, GColorWhite);
+  text_layer_set_background_color(&setupText, GColorClear);
+  text_layer_set_font(&setupText, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
+  text_layer_set_text_alignment(&setupText, GTextAlignmentCenter);
+  text_layer_set_text(&setupText, "Last: d100 > 10 times");
+  layer_add_child(&window.layer, &setupText.layer);
 }
 
 
