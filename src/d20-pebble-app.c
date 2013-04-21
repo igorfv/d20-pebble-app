@@ -49,6 +49,19 @@ void newSetup() {
   showDiceText();
 }
 
+//Show # rolls text
+void showRollsText() {
+  char *rows = "000";
+  static char numRow[] = "000";
+
+  itoa(multiDices, numRow, 10);
+
+  strcpy(rows, "");
+  strcat(rows, numRow);
+
+  text_layer_set_text(&selectionText, rows);
+}
+
 
 // Modify these common button handlers
 void menu_up_click(ClickRecognizerRef recognizer, Window *window) {
@@ -61,6 +74,13 @@ void menu_up_click(ClickRecognizerRef recognizer, Window *window) {
     if(selectedDice >= dicesSize){ selectedDice = 0; }
 
     showDiceText();
+  }
+  else if(setupPhase == 1)
+  {
+    multiDices++;
+    //if(multiDices >= multiDices){ multiDices = 0; }
+
+    showRollsText();
   }
 }
 
@@ -76,6 +96,13 @@ void menu_down_click(ClickRecognizerRef recognizer, Window *window) {
 
     showDiceText();
   }
+  else if(setupPhase == 1)
+  {
+    multiDices--;
+    if(multiDices < 1){ multiDices = 1; }
+
+    showRollsText();
+  }
 }
 
 void menu_select_click(ClickRecognizerRef recognizer, Window *window) {
@@ -86,7 +113,7 @@ void menu_select_click(ClickRecognizerRef recognizer, Window *window) {
   {
     setupPhase++;
     text_layer_set_text(&titleText, "Number off rolls:");
-    text_layer_set_text(&selectionText, "1");
+    showRollsText();
   }
 }
 
