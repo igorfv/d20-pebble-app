@@ -1,4 +1,3 @@
-
 #include "pebble_os.h"
 #include "pebble_app.h"
 #include "pebble_fonts.h"
@@ -8,6 +7,7 @@
 #define MY_UUID { 0x69, 0xA7, 0x50, 0x95, 0x77, 0xDB, 0x4A, 0xB3, 0x92, 0x43, 0xED, 0xB0, 0x4C, 0xD2, 0x90, 0xE1 }
 PBL_APP_INFO(MY_UUID, "d20", "Igor Vieira", 1,0, /* App version */ RESOURCE_ID_IMAGE_MENU_ICON, APP_INFO_STANDARD_APP);
 
+#define TIME_ZONE_OFFSET -5
 
 Window window;
 
@@ -21,6 +21,44 @@ signed int selectedDice = 0;
 signed int multiDices = 1;
 int setupPhase = 0;
 
+long randSeed;
+
+
+/**************************************************
+* RANDOM FUNCTION BY http://github.com/rickschrader
+***************************************************/
+
+int get_unix_time_from_current_time(PblTm *current_time)
+{
+  unsigned int unix_time;
+
+  /* Convert time to seconds since epoch. */
+      unix_time = ((0-TIME_ZONE_OFFSET)*3600) + /* time zone offset */ 
+              + current_time->tm_sec /* start with seconds */
+              + current_time->tm_min*60 /* add minutes */
+              + current_time->tm_hour*3600 /* add hours */
+              + current_time->tm_yday*86400 /* add days */
+              + (current_time->tm_year-70)*31536000 /* add years since 1970 */
+              + ((current_time->tm_year-69)/4)*86400 /* add a day after leap years, starting in 1973 */
+              - ((current_time->tm_year-1)/100)*86400 /* remove a leap day every 100 years, starting in 2001 */
+              + ((current_time->tm_year+299)/400)*86400; /* add a leap day back every 400 years, starting in 2001*/
+
+  return unix_time;
+}
+
+int get_unix_time()
+{
+  PblTm current_time;
+  get_time(&current_time);
+
+  return get_unix_time_from_current_time(&current_time);
+}
+
+int random(int max)
+{
+  randSeed = (((randSeed * 214013L + 2531011L) >> 16) & 32767);
+  return ((randSeed % max) + 1);
+}
 
 
 //Show dice text
@@ -41,8 +79,6 @@ void newSetup() {
   setupPhase = 0;
   selectedDice = 0;
   multiDices = 1;
-
-  char *newDice;
 
   text_layer_set_text(&titleText, "Select your dice:");
 
@@ -65,7 +101,21 @@ void showRollsText() {
 
 //Show # rolls text
 void runDices() {
-  text_layer_set_text(&selectionText, "running");
+  unsigned int total = 0;
+  unsigned int partial = 0;
+
+  char *totalText = "000000";
+  static char totalBuff[] = "000000";
+
+
+  partial = random(dices[selectedDice]);
+
+  total = partial;
+  itoa(total, totalBuff, 10);
+
+  strcpy(totalText, totalBuff);
+
+  text_layer_set_text(&selectionText, totalText);
 }
 
 
