@@ -5,7 +5,7 @@
 
 
 #define MY_UUID { 0x69, 0xA7, 0x50, 0x95, 0x77, 0xDB, 0x4A, 0xB3, 0x92, 0x43, 0xED, 0xB0, 0x4C, 0xD2, 0x90, 0xE1 }
-PBL_APP_INFO_SIMPLE(MY_UUID, "d20", "Igor Vieira", 1,0, /* App version */ RESOURCE_ID_IMAGE_MENU_ICON, APP_INFO_STANDARD_APP);
+PBL_APP_INFO(MY_UUID, "d20", "Igor Vieira", 1,0, /* App version */ RESOURCE_ID_IMAGE_MENU_ICON, APP_INFO_STANDARD_APP);
 
 
 Window window;
