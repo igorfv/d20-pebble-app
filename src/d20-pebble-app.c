@@ -79,6 +79,14 @@ void handle_init(AppContextRef ctx) {
   text_layer_set_text_alignment(&titleText, GTextAlignmentCenter);
   text_layer_set_text(&titleText, "Select your dice:");
   layer_add_child(&window.layer, &titleText.layer);
+
+  text_layer_init(&selectionText, GRect(0,46, 144, 168-46));
+  text_layer_set_text_color(&selectionText, GColorWhite);
+  text_layer_set_background_color(&selectionText, GColorClear);
+  text_layer_set_font(&selectionText, fonts_get_system_font(FONT_KEY_GOTHAM_42_BOLD));
+  text_layer_set_text_alignment(&selectionText, GTextAlignmentCenter);
+  text_layer_set_text(&selectionText, "d20");
+  layer_add_child(&window.layer, &selectionText.layer);
 }
 
 
