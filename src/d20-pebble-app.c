@@ -87,15 +87,29 @@ void newSetup() {
 
 //Show # rolls text
 void showRollsText() {
-  char *rows = "000";
-  static char numRow[] = "000";
+  char *rolls = "000";
+  static char numRolls[] = "000";
 
-  itoa(multiDices, numRow, 10);
+  itoa(multiDices, numRolls, 10);
 
-  strcpy(rows, "");
-  strcat(rows, numRow);
+  strcpy(rolls, numRolls);
 
-  text_layer_set_text(&selectionText, rows);
+  text_layer_set_text(&selectionText, rolls);
+}
+
+
+//Show # rolls text
+void dicesRolled() {
+  char *rolls = "000";
+  static char numRolls[] = "000";
+
+  itoa(multiDices, numRolls, 10);
+
+  strcpy(rolls, "Total for ");
+  strcat(rolls, numRolls);
+  strcat(rolls, " dices");
+
+  text_layer_set_text(&titleText, rolls);
 }
 
 
@@ -107,13 +121,15 @@ void runDices() {
   char *totalText = "000000";
   static char totalBuff[] = "000000";
 
-  partial = random(dices[selectedDice]);
+  for(int cont=0;cont<multiDices;cont++)
+  {
+    partial = random(dices[selectedDice]);
+    total += partial;
+  }
 
-  total = partial;
+  
   itoa(total, totalBuff, 10);
-
   strcpy(totalText, totalBuff);
-
   text_layer_set_text(&selectionText, totalText);
 }
 
@@ -167,7 +183,7 @@ void menu_select_click(ClickRecognizerRef recognizer, Window *window) {
   if(setupPhase == 0)
   {
     setupPhase++;
-    text_layer_set_text(&titleText, "Number of rolls:");
+    text_layer_set_text(&titleText, "Number of dices:");
     showRollsText();
   }
   else if(setupPhase == 1)
