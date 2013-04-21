@@ -13,52 +13,14 @@ Window window;
 
 TextLayer titleText;
 TextLayer selectionText;
+TextLayer debug;
 
 int dices[] = {4, 6, 8, 10, 12, 20, 100};
-int selectedDice = 0;
-int multiDices = 1;
+int dicesSize = 7;
+signed int selectedDice = 0;
+signed int multiDices = 1;
 int setupPhase = 0;
 
-
-// Modify these common button handlers
-void menu_up_click(ClickRecognizerRef recognizer, Window *window) {
-  (void)recognizer;
-  (void)window;
-}
-
-
-void menu_down_click(ClickRecognizerRef recognizer, Window *window) {
-  (void)recognizer;
-  (void)window;
-}
-
-void menu_select_click(ClickRecognizerRef recognizer, Window *window) {
-  (void)recognizer;
-  (void)window;
-}
-
-
-void menu_long_select_click(ClickRecognizerRef recognizer, Window *window) {
-  (void)recognizer;
-  (void)window;
-}
-
-
-// This usually won't need to be modified
-
-void menu_click_config_provider(ClickConfig **config, Window *window) {
-  (void)window;
-
-  config[BUTTON_ID_SELECT]->click.handler = (ClickHandler) menu_select_click;
-
-  config[BUTTON_ID_SELECT]->long_click.handler = (ClickHandler) menu_long_select_click;
-
-  config[BUTTON_ID_UP]->click.handler = (ClickHandler) menu_up_click;
-  config[BUTTON_ID_UP]->click.repeat_interval_ms = 100;
-
-  config[BUTTON_ID_DOWN]->click.handler = (ClickHandler) menu_down_click;
-  config[BUTTON_ID_DOWN]->click.repeat_interval_ms = 100;
-}
 
 
 //Show dice text
@@ -86,6 +48,71 @@ void newSetup() {
 
   showDiceText();
 }
+
+
+// Modify these common button handlers
+void menu_up_click(ClickRecognizerRef recognizer, Window *window) {
+  (void)recognizer;
+  (void)window;
+
+  if(setupPhase == 0)
+  {
+    selectedDice++;
+    if(selectedDice >= dicesSize){ selectedDice = 0; }
+
+    showDiceText();
+  }
+}
+
+
+void menu_down_click(ClickRecognizerRef recognizer, Window *window) {
+  (void)recognizer;
+  (void)window;
+
+  if(setupPhase == 0)
+  {
+    selectedDice--;
+    if(selectedDice < 0){ selectedDice = dicesSize-1; }
+
+    showDiceText();
+  }
+}
+
+void menu_select_click(ClickRecognizerRef recognizer, Window *window) {
+  (void)recognizer;
+  (void)window;
+
+  if(setupPhase == 0)
+  {
+    setupPhase++;
+    text_layer_set_text(&titleText, "Number off rolls:");
+    text_layer_set_text(&selectionText, "1");
+  }
+}
+
+
+void menu_long_select_click(ClickRecognizerRef recognizer, Window *window) {
+  (void)recognizer;
+  (void)window;
+}
+
+
+// This usually won't need to be modified
+
+void menu_click_config_provider(ClickConfig **config, Window *window) {
+  (void)window;
+
+  config[BUTTON_ID_SELECT]->click.handler = (ClickHandler) menu_select_click;
+
+  config[BUTTON_ID_SELECT]->long_click.handler = (ClickHandler) menu_long_select_click;
+
+  config[BUTTON_ID_UP]->click.handler = (ClickHandler) menu_up_click;
+  config[BUTTON_ID_UP]->click.repeat_interval_ms = 100;
+
+  config[BUTTON_ID_DOWN]->click.handler = (ClickHandler) menu_down_click;
+  config[BUTTON_ID_DOWN]->click.repeat_interval_ms = 100;
+}
+
 
 
 // Standard app initialisation
