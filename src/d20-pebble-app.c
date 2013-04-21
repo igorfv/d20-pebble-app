@@ -112,8 +112,17 @@ void menu_select_click(ClickRecognizerRef recognizer, Window *window) {
   if(setupPhase == 0)
   {
     setupPhase++;
-    text_layer_set_text(&titleText, "Number off rolls:");
+    text_layer_set_text(&titleText, "Number of rolls:");
     showRollsText();
+  }
+  else if(setupPhase == 1)
+  {
+    setupPhase++;
+    text_layer_set_text(&titleText, "Result:");
+  }
+  else if(setupPhase == 2)
+  {
+
   }
 }
 
@@ -121,6 +130,8 @@ void menu_select_click(ClickRecognizerRef recognizer, Window *window) {
 void menu_long_select_click(ClickRecognizerRef recognizer, Window *window) {
   (void)recognizer;
   (void)window;
+
+  newSetup();
 }
 
 
