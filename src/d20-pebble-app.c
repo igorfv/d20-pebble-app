@@ -13,6 +13,9 @@ Window window;
 TextLayer titleText;
 TextLayer selectionText;
 
+int dices[] = {4, 6, 8, 10, 12, 20, 100};
+int selectedDice = 1;
+int multiDices = 1;
 
 
 // Modify these common button handlers
